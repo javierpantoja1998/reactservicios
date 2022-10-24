@@ -3,11 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import ServicioCustomer from './components/ServicioCustomer';
+import BuscadorCustomer from './components/BuscadorCustomer';
+import BuscadorCoches from './components/BuscadorCoches';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    {/* <ServicioCustomer/> */}
+   {/* <BuscadorCustomer/> */}
+   <BuscadorCoches/>
   </React.StrictMode>
 );
 
