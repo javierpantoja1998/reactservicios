@@ -77,7 +77,11 @@ export default class BuscadorCoches extends Component {
             <tbody>
                 {
                     this.state.customers.map((customer, index) => {
-                        
+                        <tr>
+                            <td>
+                                
+                            </td>
+                        </tr>
                     })
                 }
             </tbody>
