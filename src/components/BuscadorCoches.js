@@ -1,92 +1,171 @@
-import React, { Component } from 'react';
-//Importar la libreria AXIOS
-import axios from 'axios';
-//Importamos Global para usar variables globales
-import Global from '../Global';
+import React, { Component } from 'react'; 
+
+import axios from 'axios'; 
+
+import Global from '../Global'; 
+
+export default class BuscadorCoches extends Component { 
+
+    cajaMarcaRef = React.createRef(); 
+
+    filtrarCoches = (e) => { 
+
+        e.preventDefault(); 
+
+        //NO VOY A UTILIZAR AXIOS 
+
+        var coches = this.state.coches; 
+
+        var marca = this.cajaMarcaRef.current.value.toLowerCase(); 
+
+        //DEBEMOS RECORRER TODOS LOS COCHES DEL ARRAY Y 
+
+        //TENER UN IF 
+
+        //VOY A UTILIZAR UN METODO DE Array LLAMADO filter() 
+
+        // Array.filter(obj => obj.propiedad == valor) 
+
+        var cochesfiltrados =  
+
+            coches.filter(car => car.marca.toLowerCase().includes(marca)); 
+
+        //ASIGNAMOS DE NUEVO LOS COCHES DE STATE 
+
+        this.setState({ 
+
+            coches: cochesfiltrados 
+
+        }); 
+
+    } 
+
+    state = { 
+
+        coches: [], 
+
+        status: false 
+
+    } 
+
+    //Funcion para cargar los coches
+    loadCoches = (e) => { 
+        //Si el evento es nulo hacemos el preventDefault
+        if (e != null){ 
+
+           e.preventDefault();   
+
+        } 
+        //Definimos la peticion y creamos su variable
+        var request = "/webresources/coches"; 
+        //Definimos la url  y creamos su variable
+        var url = Global.urlCoches + request; 
+        //Realizamos el metodo axios para hacer un get
+        axios.get(url).then(res => { 
+            //Cambiamos el state
+            this.setState({ 
+
+                status: true, 
+                coches: res.data 
+            }) 
+
+        }); 
+
+    } 
+
+    componentDidMount = () => { 
+
+        this.loadCoches(); 
+
+    } 
 
 
-export default class BuscadorCoches extends Component {
-    //Definimos la refencia de la caja del input de la marca
-    cajaMarcaCoche = React.createRef();
-    //Creamos el state con {} ya que asi viene recogida ahora en la api
-    state = {
-        coche: [],
-        status: false
-    }
 
-    // buscarCoche = (e) => {
-    //     e.preventDefault();
-    //      //Recogemos y definimos el valor de la caja marca
-    //      var marca = this.cajaMarcaCoche.current.value;
-    //      var request = "/webresources/coches";
-    //      var url = Global.urlCoches + request;
+  render() { 
 
-    //      axios.get(url).then(res => {
-    //         //cambiamos el state y metemos los datos del customer
-    //         this.setState({
-    //             coche: res.data.coche,
-    //             status:true
-    //         })
-    //     });
+    return ( 
 
-    // }
+      <div> 
 
-    //Metodo para cargar todos los elementos customer del servicio api en el array state
-   loadCoches = () => {
+        <h1>Buscador Api Coches</h1> 
 
-        //Implementamos el metodo de peticion
-        //(es la parte de la url que hemos introducido ..
-        // o quitado nosotros al definirla en la variable global)
-        var request ="/webresources/coches.json";
-        //Leemos el servicio en el metodo get
-        axios.get(this.urlCoches + request).then(response => {
-            this.setState({
-                //results es el nombre del array en la api
-                customers: response.data
-            })
-        });
-    }
+        <form> 
 
+            <label>Marca: </label> 
 
-        //queremos cargar los customers al inciar la pagina
-   componentDidMount = () => {
-        this.loadCoches();
-    }
-  render() {
-    return (
-      <div>
-        <h1>Ejemplo Api Buscador Coches</h1>
-        <label>Marca:</label>
-        <input type="text"  ref={this.cajaMarcaCoche}></input>
-        <button>
-            Filtrar Coches
-        </button>
-        <button>
-            Cargar todos los coches
-        </button>
-        <table border="1px">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Conductor</th>
-                    <th>Imagen</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    this.state.customers.map((customer, index) => {
-                        <tr>
-                            <td>
-                                
-                            </td>
-                        </tr>
-                    })
-                }
-            </tbody>
-        </table>
-        </div>
-    )
-  }
-}
+            <input type="text" ref={this.cajaMarcaRef}/> 
+
+            <button onClick={this.filtrarCoches}> 
+
+                Filtrar coches 
+
+            </button> 
+
+            <button onClick={this.loadCoches}> 
+
+                Mostrar todos coches 
+
+            </button> 
+
+        </form> 
+
+        <table border="1"> 
+
+            <thead> 
+
+                <tr> 
+
+                    <th>MARCA</th> 
+
+                    <th>MODELO</th> 
+
+                    <th>CONDUCTOR</th> 
+
+                    <th>IMAGEN</th> 
+
+                </tr> 
+
+            </thead> 
+
+            <tbody> 
+
+                { 
+                    //Si el estado del state es true->
+                    this.state.status == true && 
+
+                    ( 
+                        //Recorremos los coches con un map  y definimos (coche, index)
+                        this.state.coches.map((coche, index) => { 
+
+                            return (<tr key={index}> 
+
+                                <td>{coche.marca}</td> 
+
+                                <td>{coche.modelo}</td> 
+
+                                <td>{coche.conductor}</td> 
+
+                                <td> 
+                                    <img style={{width: "80px", height: "80px"}} src={coche.imagen} alt="Imagen"/>
+
+                                </td> 
+
+                            </tr>); 
+
+                        }) 
+
+                    ) 
+
+                } 
+
+            </tbody> 
+
+        </table> 
+
+      </div> 
+
+    ) 
+
+  } 
+
+} 
