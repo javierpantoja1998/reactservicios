@@ -34,6 +34,9 @@ export default class MaestroEmpleados extends Component {
     console.log("Actual props " + this.props.iddepartamento); //iddepartamento es el props
     console.log("Viejo props " + oldProps.iddepartamento);
     //Solo haremos cambios cuando los props sean diferentes, es decir cuando los props han cambiado
+    if(this.props.iddepartamento != oldProps.iddepartamento){
+      this.loadEmpleados();
+    }
   }
 
   render() {
